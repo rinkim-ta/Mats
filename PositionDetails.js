@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { User, MapPin, Calendar, Clock, AlertTriangle, CheckCircle, XCircle, FileText, MessageSquare, Star, TrendingUp, ChevronRight, Mail, Phone, Award, Briefcase, DollarSign, Upload, Tag, Send, Eye, ThumbsUp, ThumbsDown, ChevronDown, ChevronUp, Building, Users, Copy, Edit, Plus, Target, BookOpen, Filter, BarChart3, Lock, Info, Link, Settings, File, Play, Bell } from 'lucide-react';
+import { User, MapPin, Calendar, Clock, AlertTriangle, CheckCircle, XCircle, FileText, MessageSquare, Star, TrendingUp, ChevronRight, Mail, Phone, Award, Briefcase, DollarSign, Upload, Tag, Send, Eye, ThumbsUp, ThumbsDown, ChevronDown, ChevronUp, Building, Users, Copy, Edit, Plus, Target, BookOpen, Filter, BarChart3, Lock, Info, Link, Settings, File, Play, Bell, X } from 'lucide-react';
 import KickoffDocumentPage from './PositionDetailsMeeting';
 import JobDescriptionPage from './PositionDetailsJD';
 import PositionDetailsApplicants from './PositionDetailsApplicants';
+import JobInfoPage from './PositionDetailsJobInfo';
 
 const PositionDetails = ({ onBack, jrNo }) => {
   const [activeSection, setActiveSection] = useState('overview');
@@ -44,7 +45,6 @@ const PositionDetails = ({ onBack, jrNo }) => {
     'finalAccepted'
   ]);
 
-  const [showStatusSettings, setShowStatusSettings] = useState(false);
   const [selectedStatusItems, setSelectedStatusItems] = useState([
     'totalApplications', 
     'documentReview', 
@@ -64,7 +64,8 @@ const PositionDetails = ({ onBack, jrNo }) => {
     'secondInterview': { label: '2차 면접', color: 'red' },
     'thirdInterview': { label: '3차 면접', color: 'pink' },
     'offerNegotiation': { label: '처우 협의', color: 'yellow' },
-    'finalAccepted': { label: '최종합격', color: 'green' }
+    'finalAccepted': { label: '최종합격', color: 'green' },
+    'rejected': { label: '불합격', color: 'gray' }
   };
 
   const jobData = {
@@ -75,7 +76,7 @@ const PositionDetails = ({ onBack, jrNo }) => {
     employmentType: '정규직',
     jobLevel: 'L4',
     openDate: '2025.06.10',
-    matsNumber: jrNo || 'JR0000001111',
+    matsNumber: jrNo || 'MATS0000001111',
     recruiter: '김린',
     rc: '김린',
     hiringManager: '김태현',
@@ -84,9 +85,9 @@ const PositionDetails = ({ onBack, jrNo }) => {
     position: 'Frontend Engineer (29cm)',
     closeDate: '2025.08.10',
     headcounts: [
-      { id: 'JR00000111', status: 'hiring', assignedRecruiter: '김린' },
-      { id: 'JR00000112', status: 'completed', assignedRecruiter: '김린' },
-      { id: 'JR00000113', status: 'hiring', assignedRecruiter: '차지현' }
+      { id: 'MATS0000111', status: 'hiring', assignedRecruiter: '김린' },
+      { id: 'MATS0000112', status: 'completed', assignedRecruiter: '김린' },
+      { id: 'MATS0000113', status: 'hiring', assignedRecruiter: '차지현' }
     ],
     similarPositions: [
       { id: 'MATS001', title: 'Frontend Engineer (무신사)', status: 'active' },
@@ -101,7 +102,8 @@ const PositionDetails = ({ onBack, jrNo }) => {
       secondInterview: 8,
       thirdInterview: 5,
       offerNegotiation: 3,
-      finalAccepted: 2
+      finalAccepted: 2,
+      rejected: 15
     },
     stageStats: {
       'totalApplications': { count: 47, percent: 100, wow: 92 },
@@ -111,7 +113,8 @@ const PositionDetails = ({ onBack, jrNo }) => {
       'secondInterview': { count: 8, percent: 17, wow: 94 },
       'thirdInterview': { count: 5, percent: 11, wow: 89 },
       'offerNegotiation': { count: 3, percent: 6, wow: 76 },
-      'finalAccepted': { count: 2, percent: 4, wow: 95 }
+      'finalAccepted': { count: 2, percent: 4, wow: 95 },
+      'rejected': { count: 15, percent: 32, wow: 88 }
     },
     dailyStats: [
       { date: '2025-06-10', applications: 3, stage_changes: 5 },
@@ -133,7 +136,8 @@ const PositionDetails = ({ onBack, jrNo }) => {
     'secondInterview': '2차 면접',
     'thirdInterview': '3차 면접',
     'offerNegotiation': '처우 협의',
-    'finalAccepted': '최종합격'
+    'finalAccepted': '최종합격',
+    'rejected': '불합격'
   };
 
   const stageColors = {
@@ -144,7 +148,8 @@ const PositionDetails = ({ onBack, jrNo }) => {
     'secondInterview': 'bg-red-500',
     'thirdInterview': 'bg-pink-500',
     'offerNegotiation': 'bg-yellow-500',
-    'finalAccepted': 'bg-green-500'
+    'finalAccepted': 'bg-green-500',
+    'rejected': 'bg-gray-500'
   };
 
   const navigationItems = [
@@ -296,7 +301,8 @@ const PositionDetails = ({ onBack, jrNo }) => {
       'red': 'bg-red-50 text-red-600',
       'pink': 'bg-pink-50 text-pink-600',
       'yellow': 'bg-yellow-50 text-yellow-600',
-      'green': 'bg-green-50 text-green-600'
+      'green': 'bg-green-50 text-green-600',
+      'gray': 'bg-gray-50 text-gray-600'
     };
     return colorMap[colorName] || 'bg-gray-50 text-gray-600';
   };
@@ -310,491 +316,540 @@ const PositionDetails = ({ onBack, jrNo }) => {
   };
 
   const renderOverviewContent = () => (
-    <div className="space-y-8">
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-          <div className="flex items-center justify-between mb-6">
-            <div className="flex items-center">
-              <Target className="w-5 h-5 mr-2 text-blue-600" />
-              <h3 className="text-lg font-semibold text-gray-800">포지션 정보</h3>
-              <div className="ml-3 flex items-center text-sm text-amber-600 bg-amber-50 px-2 py-1 rounded">
-                <Lock className="w-4 h-4 mr-1" />
-                워크데이 연동
-              </div>
-            </div>
-            <div className="text-sm font-medium text-blue-600 bg-blue-50 px-3 py-1 rounded-full">
-              {getDaysFromOpen()}일차
-            </div>
-          </div>
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="text-sm font-medium text-gray-600">Recruiter</label>
-              <p className="text-gray-800">{jobData.recruiter}</p>
-            </div>
-            <div>
-              <label className="text-sm font-medium text-gray-600">RC</label>
-              <p className="text-gray-800">{jobData.rc}</p>
-            </div>
-            <div>
-              <label className="text-sm font-medium text-gray-600">HM</label>
-              <p className="text-gray-800">{jobData.hiringManager}</p>
-            </div>
-            <div>
-              <label className="text-sm font-medium text-gray-600">관할 조직</label>
-              <p className="text-gray-800">{jobData.managingOrganization}</p>
-            </div>
-            <div>
-              <label className="text-sm font-medium text-gray-600">직무군</label>
-              <p className="text-gray-800">{jobData.jobGroup}</p>
-            </div>
-            <div>
-              <label className="text-sm font-medium text-gray-600">포지션</label>
-              <p className="text-gray-800 font-medium">{jobData.position}</p>
-            </div>
-            <div>
-              <label className="text-sm font-medium text-gray-600">레벨</label>
-              <p className="text-gray-800">{jobData.jobLevel}</p>
-            </div>
-            <div>
-              <label className="text-sm font-medium text-gray-600">부문</label>
-              <p className="text-gray-800">{jobData.department}</p>
-            </div>
-            <div>
-              <label className="text-sm font-medium text-gray-600">포지션 오픈일</label>
-              <p className="text-gray-800">{jobData.openDate}</p>
-            </div>
-            <div>
-              <label className="text-sm font-medium text-gray-600">포지션 마감일</label>
-              <p className="text-gray-800">{jobData.closeDate}</p>
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-          <div className="flex items-center justify-between mb-6">
-            <div className="flex items-center">
-              <BarChart3 className="w-5 h-5 mr-2 text-blue-600" />
-              <h3 className="text-lg font-semibold text-gray-800">채용 통계</h3>
-            </div>
-            <button
-              onClick={() => setShowStatsSettings(!showStatsSettings)}
-              className="px-3 py-2 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors flex items-center"
-              title="통계 설정"
-            >
-              <Settings className="w-4 h-4 mr-1" />
-              설정
-            </button>
-          </div>
-          
-          {showStatsSettings && (
-            <div className="mb-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
-              <div className="flex items-center justify-between mb-3">
-                <h4 className="font-medium text-gray-800">표시할 통계 선택</h4>
-                <div className="flex space-x-2">
-                  <button
-                    onClick={handleSelectAllStats}
-                    className="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded hover:bg-blue-200 transition-colors"
-                  >
-                    전체 선택
-                  </button>
-                  <button
-                    onClick={handleDeselectAllStats}
-                    className="text-xs px-2 py-1 bg-gray-100 text-gray-700 rounded hover:bg-gray-200 transition-colors"
-                  >
-                    전체 해제
-                  </button>
-                </div>
-              </div>
-              <div className="grid grid-cols-3 gap-2">
-                {Object.entries(allStatsOptions).map(([key, option]) => (
-                  <label key={key} className="flex items-center space-x-2 cursor-pointer p-2 rounded hover:bg-white transition-colors">
-                    <input
-                      type="checkbox"
-                      checked={selectedStats.includes(key)}
-                      onChange={() => handleStatsToggle(key)}
-                      className="w-4 h-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500"
-                    />
-                    <span className="text-sm text-gray-700">{option.label}</span>
-                    <span className="text-xs text-gray-500">({jobData.stats[key] || 0})</span>
-                  </label>
-                ))}
-              </div>
-              <div className="mt-3 text-xs text-gray-500">
-                선택된 항목: {selectedStats.length}개
-              </div>
-            </div>
-          )}
-
-          {selectedStats.length === 0 ? (
-            <div className="text-center py-8 text-gray-500">
-              <BarChart3 className="w-12 h-12 mx-auto mb-3 text-gray-300" />
-              <p>표시할 통계를 선택해주세요.</p>
-              <button
-                onClick={() => setShowStatsSettings(true)}
-                className="mt-2 text-blue-600 hover:text-blue-800 underline"
-              >
-                설정하기
-              </button>
-            </div>
-          ) : (
-            <div className="grid grid-cols-3 gap-3 mb-6">
-              {selectedStats.map((statKey) => {
-                const option = allStatsOptions[statKey];
-                const value = jobData.stats[statKey] || 0;
-                return (
-                  <div key={statKey} className={`text-center p-3 rounded-lg ${getStatColor(option.color)}`}>
-                    <div className="text-xl font-bold">{value}</div>
-                    <div className="text-xs text-gray-600">{option.label}</div>
-                  </div>
-                );
-              })}
-            </div>
-          )}
-        </div>
+    <div className="relative">
+      {/* 우측 상단 설정 버튼 */}
+      <div className="absolute top-0 right-0 z-10">
+        <button
+          onClick={() => setShowStatsSettings(!showStatsSettings)}
+          className="px-4 py-2 bg-white hover:bg-gray-50 border border-gray-200 rounded-lg transition-colors flex items-center text-gray-700 hover:text-blue-600 shadow-sm"
+          title="통계 및 현황 표시 설정"
+        >
+          <Settings className="w-4 h-4 mr-2" />
+          표시 항목 설정
+        </button>
       </div>
 
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-        <div className="flex items-center justify-between mb-6">
-          <div className="flex items-center">
-            <Users className="w-5 h-5 mr-2 text-blue-600" />
-            <h3 className="text-lg font-semibold text-gray-800">채용 현황</h3>
-          </div>
-          <button
-            onClick={() => setShowStatusSettings(!showStatusSettings)}
-            className="px-3 py-2 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors flex items-center"
-            title="현황 설정"
-          >
-            <Settings className="w-4 h-4 mr-1" />
-            설정
-          </button>
-        </div>
-
-        {showStatusSettings && (
-          <div className="mb-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
-            <div className="flex items-center justify-between mb-3">
-              <h4 className="font-medium text-gray-800">표시할 현황 선택</h4>
-              <div className="flex space-x-2">
-                <button
-                  onClick={handleSelectAllStatus}
-                  className="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded hover:bg-blue-200 transition-colors"
-                >
-                  전체 선택
-                </button>
-                <button
-                  onClick={handleDeselectAllStatus}
-                  className="text-xs px-2 py-1 bg-gray-100 text-gray-700 rounded hover:bg-gray-200 transition-colors"
-                >
-                  전체 해제
-                </button>
+      <div className="space-y-8 pt-16">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+            <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center">
+                <Target className="w-5 h-5 mr-2 text-blue-600" />
+                <h3 className="text-lg font-semibold text-gray-800">포지션 정보</h3>
+                <div className="ml-3 flex items-center text-sm text-amber-600 bg-amber-50 px-2 py-1 rounded">
+                  <Lock className="w-4 h-4 mr-1" />
+                  워크데이 연동
+                </div>
+              </div>
+              <div className="text-sm font-medium text-blue-600 bg-blue-50 px-3 py-1 rounded-full">
+                {getDaysFromOpen()}일차
               </div>
             </div>
-            <div className="grid grid-cols-3 gap-2">
-              {Object.entries(allStatsOptions).map(([key, option]) => (
-                <label key={key} className="flex items-center space-x-2 cursor-pointer p-2 rounded hover:bg-white transition-colors">
-                  <input
-                    type="checkbox"
-                    checked={selectedStatusItems.includes(key)}
-                    onChange={() => handleStatusToggle(key)}
-                    className="w-4 h-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500"
-                  />
-                  <span className="text-sm text-gray-700">{option.label}</span>
-                  <span className="text-xs text-gray-500">({jobData.stageStats[key]?.count || 0})</span>
-                </label>
-              ))}
-            </div>
-            <div className="mt-3 text-xs text-gray-500">
-              선택된 항목: {selectedStatusItems.length}개
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="text-xs font-medium text-gray-500 uppercase tracking-wide">Recruiter</label>
+                <p className="text-sm font-semibold text-gray-900 mt-1">{jobData.recruiter}</p>
+              </div>
+              <div>
+                <label className="text-xs font-medium text-gray-500 uppercase tracking-wide">RC</label>
+                <p className="text-sm font-semibold text-gray-900 mt-1">{jobData.rc}</p>
+              </div>
+              <div>
+                <label className="text-xs font-medium text-gray-500 uppercase tracking-wide">HM</label>
+                <p className="text-sm font-semibold text-gray-900 mt-1">{jobData.hiringManager}</p>
+              </div>
+              <div>
+                <label className="text-xs font-medium text-gray-500 uppercase tracking-wide">관할 조직</label>
+                <p className="text-sm font-semibold text-gray-900 mt-1">{jobData.managingOrganization}</p>
+              </div>
+              <div>
+                <label className="text-xs font-medium text-gray-500 uppercase tracking-wide">직무군</label>
+                <p className="text-sm font-semibold text-gray-900 mt-1">{jobData.jobGroup}</p>
+              </div>
+              <div>
+                <label className="text-xs font-medium text-gray-500 uppercase tracking-wide">포지션</label>
+                <p className="text-sm font-bold text-gray-900 mt-1">{jobData.position}</p>
+              </div>
+              <div>
+                <label className="text-xs font-medium text-gray-500 uppercase tracking-wide">레벨</label>
+                <p className="text-sm font-semibold text-gray-900 mt-1">{jobData.jobLevel}</p>
+              </div>
+              <div>
+                <label className="text-xs font-medium text-gray-500 uppercase tracking-wide">부문</label>
+                <p className="text-sm font-semibold text-gray-900 mt-1">{jobData.department}</p>
+              </div>
+              <div>
+                <label className="text-xs font-medium text-gray-500 uppercase tracking-wide">포지션 승인일</label>
+                <p className="text-sm font-semibold text-gray-900 mt-1">{jobData.openDate}</p>
+              </div>
+              <div>
+                <label className="text-xs font-medium text-gray-500 uppercase tracking-wide">포지션 마감일</label>
+                <p className="text-sm font-semibold text-gray-900 mt-1">{jobData.closeDate}</p>
+              </div>
+              <div>
+                <label className="text-xs font-medium text-gray-500 uppercase tracking-wide">후보자 입사일</label>
+                <p className="text-sm font-semibold text-gray-900 mt-1">{jobData.closeDate}</p>
+              </div>
+              <div>
+                <label className="text-xs font-medium text-gray-500 uppercase tracking-wide">날짜 하나 더</label>
+                <p className="text-sm font-semibold text-gray-900 mt-1">{jobData.closeDate}</p>
+              </div>
+              
+              {/* 면접관 정보 - 선택된 표시 항목에 따라 동적으로 표시 */}
+              {selectedStats.includes('firstInterview') && (
+                <div>
+                  <label className="text-xs font-medium text-gray-500 uppercase tracking-wide">1차 면접관</label>
+                  <p className="text-sm font-semibold text-gray-900 mt-1">{jobData.firstInterviewer || '-'}</p>
+                </div>
+              )}
+              {selectedStats.includes('secondInterview') && (
+                <div>
+                  <label className="text-xs font-medium text-gray-500 uppercase tracking-wide">2차 면접관</label>
+                  <p className="text-sm font-semibold text-gray-900 mt-1">{jobData.secondInterviewer || '-'}</p>
+                </div>
+              )}
+              {selectedStats.includes('thirdInterview') && (
+                <div>
+                  <label className="text-xs font-medium text-gray-500 uppercase tracking-wide">3차 면접관</label>
+                  <p className="text-sm font-semibold text-gray-900 mt-1">{jobData.thirdInterviewer || '-'}</p>
+                </div>
+              )}
             </div>
           </div>
-        )}
-        
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          <div>
-            <h4 className="font-medium text-gray-800 mb-4">단계별 현황</h4>
-            {selectedStatusItems.length === 0 ? (
+
+          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+            <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center">
+                <BarChart3 className="w-5 h-5 mr-2 text-blue-600" />
+                <h3 className="text-lg font-semibold text-gray-800">채용 통계</h3>
+              </div>
+            </div>
+            
+            {selectedStats.length === 0 ? (
               <div className="text-center py-8 text-gray-500">
-                <Users className="w-12 h-12 mx-auto mb-3 text-gray-300" />
-                <p>표시할 현황을 선택해주세요.</p>
+                <BarChart3 className="w-12 h-12 mx-auto mb-3 text-gray-300" />
+                <p>표시할 통계를 선택해주세요.</p>
                 <button
-                  onClick={() => setShowStatusSettings(true)}
+                  onClick={() => setShowStatsSettings(true)}
                   className="mt-2 text-blue-600 hover:text-blue-800 underline"
                 >
                   설정하기
                 </button>
               </div>
             ) : (
-              <div className="space-y-3">
-                {selectedStatusItems.map((stage) => {
-                  const data = jobData.stageStats[stage];
-                  if (!data) return null;
+              <div className="grid grid-cols-3 gap-3 mb-6">
+                {selectedStats.map((statKey) => {
+                  const option = allStatsOptions[statKey];
+                  const value = jobData.stats[statKey] || 0;
                   return (
-                    <div key={stage} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                      <div className="flex items-center space-x-3">
-                        <div className={`w-3 h-3 rounded-full ${stageColors[stage]}`}></div>
-                        <span className="text-sm text-gray-700">{stageNames[stage]}</span>
-                      </div>
-                      <div className="flex items-center space-x-4">
-                        <div className="text-right">
-                          <span className="font-medium text-gray-800">{data.count}명</span>
-                          <span className="text-xs text-gray-500 ml-1">({data.percent}%)</span>
-                        </div>
-                        <div className="text-right">
-                          <span className="text-xs text-gray-500">WoW</span>
-                          <span className={`font-medium ml-1 ${getWowColor(data.wow)}`}>
-                            {data.wow}%
-                          </span>
-                        </div>
-                      </div>
+                    <div key={statKey} className={`text-center p-3 rounded-lg ${getStatColor(option.color)}`}>
+                      <div className="text-xl font-bold">{value}</div>
+                      <div className="text-xs text-gray-600">{option.label}</div>
                     </div>
                   );
                 })}
               </div>
             )}
           </div>
+        </div>
+
+        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center">
+              <Users className="w-5 h-5 mr-2 text-blue-600" />
+              <h3 className="text-lg font-semibold text-gray-800">채용 현황</h3>
+            </div>
+          </div>
           
-          <div>
-            <h4 className="font-medium text-gray-800 mb-4">채용 상태</h4>
-            <div className="bg-gray-50 rounded-lg p-6">
-              <div className="text-center mb-6">
-                <div className="flex justify-center space-x-3 mb-4">
-                  <div className={`w-6 h-6 rounded-full ${jobData.recruitmentStatus === 'good' ? 'bg-green-500 shadow-lg shadow-green-200' : 'bg-gray-300'}`}></div>
-                  <div className={`w-6 h-6 rounded-full ${jobData.recruitmentStatus === 'warning' ? 'bg-yellow-500 shadow-lg shadow-yellow-200' : 'bg-gray-300'}`}></div>
-                  <div className={`w-6 h-6 rounded-full ${jobData.recruitmentStatus === 'danger' ? 'bg-red-500 shadow-lg shadow-red-200' : 'bg-gray-300'}`}></div>
-                </div>
-                
-                <div className="mb-4">
-                  {jobData.recruitmentStatus === 'good' && (
-                    <div>
-                      <div className="text-lg font-semibold text-green-600 mb-2">원활한 진행 중</div>
-                      <div className="text-sm text-gray-600">채용이 계획대로 순조롭게 진행되고 있습니다</div>
-                    </div>
-                  )}
-                  {jobData.recruitmentStatus === 'warning' && (
-                    <div>
-                      <div className="text-lg font-semibold text-yellow-600 mb-2">주의 필요</div>
-                      <div className="text-sm text-gray-600">일부 단계에서 지연이 발생하고 있습니다</div>
-                    </div>
-                  )}
-                  {jobData.recruitmentStatus === 'danger' && (
-                    <div>
-                      <div className="text-lg font-semibold text-red-600 mb-2">긴급 조치 필요</div>
-                      <div className="text-sm text-gray-600">채용 진행에 심각한 문제가 있습니다</div>
-                    </div>
-                  )}
-                </div>
-                
-                <div className="grid grid-cols-2 gap-4 text-sm">
-                  <div className="text-center p-3 bg-white rounded-lg">
-                    <div className="text-gray-500 mb-1">진행률</div>
-                    <div className="font-semibold text-gray-800">{jobData.progressRate}%</div>
-                  </div>
-                  <div className="text-center p-3 bg-white rounded-lg">
-                    <div className="text-gray-500 mb-1">서류 합격률</div>
-                    <div className="font-semibold text-gray-800">{jobData.targetComparison}%</div>
-                  </div>
-                  <div className="text-center p-3 bg-white rounded-lg">
-                    <div className="text-gray-500 mb-1">면접 합격률</div>
-                    <div className="font-semibold text-gray-800">{jobData.passRate}%</div>
-                  </div>
-                  <div className="text-center p-3 bg-white rounded-lg">
-                    <div className="text-gray-500 mb-1">최종 합격률</div>
-                    <div className="font-semibold text-gray-800">{jobData.passRate}%</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-        <div className="flex items-center mb-6">
-          <MessageSquare className="w-5 h-5 mr-2 text-blue-600" />
-          <h3 className="text-lg font-semibold text-gray-800">포지션 메모</h3>
-          <span className="ml-2 text-sm text-gray-500">({memos.length})</span>
-        </div>
-        
-        <div className="mb-6 p-4 bg-gray-50 rounded-lg">
-          <textarea
-            value={newMemo}
-            onChange={(e) => setNewMemo(e.target.value)}
-            placeholder="포지션에 대한 메모나 코멘트를 남겨주세요... (@사용자명 으로 태그 가능)"
-            className="w-full p-3 border border-gray-300 rounded-lg resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            rows="3"
-          />
-          <div className="flex justify-between items-center mt-3">
-            <div className="text-sm text-gray-500">
-              <span className="font-medium">태그 가능한 사용자:</span>
-              {availableUsers.map((user, index) => (
-                <span key={user} className="ml-1">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div>
+              <h4 className="font-medium text-gray-800 mb-4">단계별 현황</h4>
+              {selectedStatusItems.length === 0 ? (
+                <div className="text-center py-8 text-gray-500">
+                  <Users className="w-12 h-12 mx-auto mb-3 text-gray-300" />
+                  <p>표시할 현황을 선택해주세요.</p>
                   <button
-                    onClick={() => setNewMemo(prev => prev + `@${user} `)}
-                    className="text-blue-600 hover:text-blue-800 underline"
+                    onClick={() => setShowStatsSettings(true)}
+                    className="mt-2 text-blue-600 hover:text-blue-800 underline"
                   >
-                    @{user}
+                    설정하기
                   </button>
-                  {index < availableUsers.length - 1 && ', '}
-                </span>
-              ))}
-            </div>
-            <button
-              onClick={handleAddMemo}
-              disabled={!newMemo.trim()}
-              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
-            >
-              메모 추가
-            </button>
-          </div>
-        </div>
-
-        <div className="space-y-4">
-          {memos.length === 0 ? (
-            <div className="text-center py-8 text-gray-500">
-              <MessageSquare className="w-12 h-12 mx-auto mb-3 text-gray-300" />
-              <p>아직 작성된 메모가 없습니다.</p>
-              <p className="text-sm">첫 번째 메모를 작성해보세요!</p>
-            </div>
-          ) : (
-            memos.map((memo) => (
-              <div key={memo.id} className="border border-gray-200 rounded-lg p-4 hover:bg-gray-50 transition-colors">
-                <div className="flex items-start justify-between mb-3">
-                  <div className="flex items-center space-x-2">
-                    <span className="font-medium text-gray-800">{memo.author}</span>
-                    <span className="text-sm text-gray-500">
-                      {memo.isEdited ? memo.editedAt : memo.createdAt}
-                      {memo.isEdited && <span className="ml-1 text-blue-600">(편집됨)</span>}
-                    </span>
-                  </div>
-                  {memo.author === currentUser && (
-                    <button
-                      onClick={() => handleEditMemo(memo.id)}
-                      className="p-1 text-gray-400 hover:text-blue-600 transition-colors"
-                      title="메모 편집"
-                    >
-                      <Edit className="w-4 h-4" />
-                    </button>
-                  )}
                 </div>
-                
-                {editingMemoId === memo.id ? (
-                  <div className="space-y-3">
-                    <textarea
-                      value={editingContent}
-                      onChange={(e) => setEditingContent(e.target.value)}
-                      className="w-full p-3 border border-gray-300 rounded-lg resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      rows="3"
-                      placeholder="@사용자명 으로 태그 가능"
-                    />
-                    <div className="flex justify-between items-center">
-                      <div className="text-sm text-gray-500">
-                        {availableUsers.map((user, index) => (
-                          <span key={user} className="mr-2">
-                            <button
-                              onClick={() => setEditingContent(prev => prev + `@${user} `)}
-                              className="text-blue-600 hover:text-blue-800 underline text-xs"
-                            >
-                              @{user}
-                            </button>
-                          </span>
-                        ))}
+              ) : (
+                <div className="space-y-3">
+                  {selectedStatusItems.map((stage) => {
+                    const data = jobData.stageStats[stage];
+                    if (!data) return null;
+                    return (
+                      <div key={stage} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                        <div className="flex items-center space-x-3">
+                          <div className={`w-3 h-3 rounded-full ${stageColors[stage]}`}></div>
+                          <span className="text-sm text-gray-700">{stageNames[stage]}</span>
+                        </div>
+                        <div className="flex items-center space-x-4">
+                          <div className="text-right">
+                            <span className="font-medium text-gray-800">{data.count}명</span>
+                          </div>
+                          <div className="text-right">
+                            <span className="text-xs text-gray-500">WoW</span>
+                            <span className={`font-medium ml-1 ${getWowColor(data.wow)}`}>
+                              {data.wow}%
+                            </span>
+                          </div>
+                        </div>
                       </div>
-                      <div className="flex space-x-2">
-                        <button
-                          onClick={handleCancelEdit}
-                          className="px-3 py-1 text-gray-600 hover:bg-gray-100 rounded transition-colors"
-                        >
-                          취소
-                        </button>
-                        <button
-                          onClick={() => handleSaveEdit(memo.id)}
-                          disabled={!editingContent.trim()}
-                          className="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
-                        >
-                          저장
-                        </button>
-                      </div>
-                    </div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+            
+            <div>
+              <h4 className="font-medium text-gray-800 mb-4">채용 상태</h4>
+              <div className="bg-gray-50 rounded-lg p-6">
+                <div className="text-center mb-6">
+                  <div className="flex justify-center space-x-3 mb-4">
+                    <div className={`w-6 h-6 rounded-full ${jobData.recruitmentStatus === 'good' ? 'bg-green-500 shadow-lg shadow-green-200' : 'bg-gray-300'}`}></div>
+                    <div className={`w-6 h-6 rounded-full ${jobData.recruitmentStatus === 'warning' ? 'bg-yellow-500 shadow-lg shadow-yellow-200' : 'bg-gray-300'}`}></div>
+                    <div className={`w-6 h-6 rounded-full ${jobData.recruitmentStatus === 'danger' ? 'bg-red-500 shadow-lg shadow-red-200' : 'bg-gray-300'}`}></div>
                   </div>
-                ) : (
-                  <div>
-                    <p className="text-gray-700 leading-relaxed mb-2">
-                      {renderContentWithTags(memo.content)}
-                    </p>
-                    {memo.tags && memo.tags.length > 0 && (
-                      <div className="flex items-center space-x-1 text-sm">
-                        <span className="text-gray-500">태그:</span>
-                        {memo.tags.map((tag, index) => (
-                          <span key={index} className="bg-blue-50 text-blue-700 px-2 py-1 rounded-full text-xs">
-                            {tag}
-                          </span>
-                        ))}
+                  
+                  <div className="mb-4">
+                    {jobData.recruitmentStatus === 'good' && (
+                      <div>
+                        <div className="text-lg font-semibold text-green-600 mb-2">원활한 진행 중</div>
+                        <div className="text-sm text-gray-600">채용이 계획대로 순조롭게 진행되고 있습니다</div>
+                      </div>
+                    )}
+                    {jobData.recruitmentStatus === 'warning' && (
+                      <div>
+                        <div className="text-lg font-semibold text-yellow-600 mb-2">주의 필요</div>
+                        <div className="text-sm text-gray-600">일부 단계에서 지연이 발생하고 있습니다</div>
+                      </div>
+                    )}
+                    {jobData.recruitmentStatus === 'danger' && (
+                      <div>
+                        <div className="text-lg font-semibold text-red-600 mb-2">긴급 조치 필요</div>
+                        <div className="text-sm text-gray-600">채용 진행에 심각한 문제가 있습니다</div>
                       </div>
                     )}
                   </div>
-                )}
+                  
+                  <div className="grid grid-cols-2 gap-4 text-sm">
+                    <div className="text-center p-3 bg-white rounded-lg">
+                      <div className="text-gray-500 mb-1">진행률</div>
+                      <div className="font-semibold text-gray-800">{jobData.progressRate}%</div>
+                    </div>
+                    <div className="text-center p-3 bg-white rounded-lg">
+                      <div className="text-gray-500 mb-1">서류 합격률</div>
+                      <div className="font-semibold text-gray-800">{jobData.targetComparison}%</div>
+                    </div>
+                    <div className="text-center p-3 bg-white rounded-lg">
+                      <div className="text-gray-500 mb-1">면접 합격률</div>
+                      <div className="font-semibold text-gray-800">{jobData.passRate}%</div>
+                    </div>
+                    <div className="text-center p-3 bg-white rounded-lg">
+                      <div className="text-gray-500 mb-1">최종 합격률</div>
+                      <div className="font-semibold text-gray-800">{jobData.passRate}%</div>
+                    </div>
+                  </div>
+                </div>
               </div>
-            ))
-          )}
+            </div>
+          </div>
         </div>
-      </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
           <div className="flex items-center mb-6">
-            <Briefcase className="w-5 h-5 mr-2 text-blue-600" />
-            <h3 className="text-lg font-semibold text-gray-800">TO 관리</h3>
+            <MessageSquare className="w-5 h-5 mr-2 text-blue-600" />
+            <h3 className="text-lg font-semibold text-gray-800">포지션 메모</h3>
+            <span className="ml-2 text-sm text-gray-500">({memos.length})</span>
           </div>
+          
+          <div className="mb-6 p-4 bg-gray-50 rounded-lg">
+            <textarea
+              value={newMemo}
+              onChange={(e) => setNewMemo(e.target.value)}
+              placeholder="포지션에 대한 메모나 코멘트를 남겨주세요... (@사용자명 으로 태그 가능)"
+              className="w-full p-3 border border-gray-300 rounded-lg resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              rows="3"
+            />
+            <div className="flex justify-between items-center mt-3">
+              <div className="text-sm text-gray-500">
+                <span className="font-medium">태그 가능한 사용자:</span>
+                {availableUsers.map((user, index) => (
+                  <span key={user} className="ml-1">
+                    <button
+                      onClick={() => setNewMemo(prev => prev + `@${user} `)}
+                      className="text-blue-600 hover:text-blue-800 underline"
+                    >
+                      @{user}
+                    </button>
+                    {index < availableUsers.length - 1 && ', '}
+                  </span>
+                ))}
+              </div>
+              <button
+                onClick={handleAddMemo}
+                disabled={!newMemo.trim()}
+                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
+              >
+                메모 추가
+              </button>
+            </div>
+          </div>
+
           <div className="space-y-4">
-            {jobData.headcounts.map((hc, index) => (
-              <div key={hc.id} className="border border-gray-200 rounded-lg p-4">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="font-medium text-gray-800">{hc.id}</span>
-                  <span className={`text-xs px-2 py-1 rounded-full ${
-                    hc.status === 'hiring' ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800'
-                  }`}>
-                    {hc.status === 'hiring' ? '채용 중' : '채용 완료'}
-                  </span>
-                </div>
-                <p className="text-sm text-gray-600 mb-2">Frontend Engineer L4</p>
-                <p className="text-xs text-gray-500">담당: {hc.assignedRecruiter}</p>
+            {memos.length === 0 ? (
+              <div className="text-center py-8 text-gray-500">
+                <MessageSquare className="w-12 h-12 mx-auto mb-3 text-gray-300" />
+                <p>아직 작성된 메모가 없습니다.</p>
+                <p className="text-sm">첫 번째 메모를 작성해보세요!</p>
               </div>
-            ))}
+            ) : (
+              memos.map((memo) => (
+                <div key={memo.id} className="border border-gray-200 rounded-lg p-4 hover:bg-gray-50 transition-colors">
+                  <div className="flex items-start justify-between mb-3">
+                    <div className="flex items-center space-x-2">
+                      <span className="font-medium text-gray-800">{memo.author}</span>
+                      <span className="text-sm text-gray-500">
+                        {memo.isEdited ? memo.editedAt : memo.createdAt}
+                        {memo.isEdited && <span className="ml-1 text-blue-600">(편집됨)</span>}
+                      </span>
+                    </div>
+                    {memo.author === currentUser && (
+                      <button
+                        onClick={() => handleEditMemo(memo.id)}
+                        className="p-1 text-gray-400 hover:text-blue-600 transition-colors"
+                        title="메모 편집"
+                      >
+                        <Edit className="w-4 h-4" />
+                      </button>
+                    )}
+                  </div>
+                  
+                  {editingMemoId === memo.id ? (
+                    <div className="space-y-3">
+                      <textarea
+                        value={editingContent}
+                        onChange={(e) => setEditingContent(e.target.value)}
+                        className="w-full p-3 border border-gray-300 rounded-lg resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        rows="3"
+                        placeholder="@사용자명 으로 태그 가능"
+                      />
+                      <div className="flex justify-between items-center">
+                        <div className="text-sm text-gray-500">
+                          {availableUsers.map((user, index) => (
+                            <span key={user} className="mr-2">
+                              <button
+                                onClick={() => setEditingContent(prev => prev + `@${user} `)}
+                                className="text-blue-600 hover:text-blue-800 underline text-xs"
+                              >
+                                @{user}
+                              </button>
+                            </span>
+                          ))}
+                        </div>
+                        <div className="flex space-x-2">
+                          <button
+                            onClick={handleCancelEdit}
+                            className="px-3 py-1 text-gray-600 hover:bg-gray-100 rounded transition-colors"
+                          >
+                            취소
+                          </button>
+                          <button
+                            onClick={() => handleSaveEdit(memo.id)}
+                            disabled={!editingContent.trim()}
+                            className="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
+                          >
+                            저장
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  ) : (
+                    <div>
+                      <p className="text-gray-700 leading-relaxed mb-2">
+                        {renderContentWithTags(memo.content)}
+                      </p>
+                      {memo.tags && memo.tags.length > 0 && (
+                        <div className="flex items-center space-x-1 text-sm">
+                          <span className="text-gray-500">태그:</span>
+                          {memo.tags.map((tag, index) => (
+                            <span key={index} className="bg-blue-50 text-blue-700 px-2 py-1 rounded-full text-xs">
+                              {tag}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
+              ))
+            )}
           </div>
         </div>
 
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-          <div className="flex items-center mb-6">
-            <Link className="w-5 h-5 mr-2 text-blue-600" />
-            <h3 className="text-lg font-semibold text-gray-800">연관 포지션</h3>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+            <div className="flex items-center mb-6">
+              <Briefcase className="w-5 h-5 mr-2 text-blue-600" />
+              <h3 className="text-lg font-semibold text-gray-800">TO 관리</h3>
+            </div>
+            <div className="space-y-4">
+              {jobData.headcounts.map((hc, index) => (
+                <div key={hc.id} className="border border-gray-200 rounded-lg p-4">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="font-medium text-gray-800">{hc.id}</span>
+                    <span className={`text-xs px-2 py-1 rounded-full ${
+                      hc.status === 'hiring' ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800'
+                    }`}>
+                      {hc.status === 'hiring' ? '채용 중' : '채용 완료'}
+                    </span>
+                  </div>
+                  <p className="text-sm text-gray-600 mb-2">Frontend Engineer L4</p>
+                  <p className="text-xs text-gray-500">담당: {hc.assignedRecruiter}</p>
+                </div>
+              ))}
+            </div>
           </div>
-          <div className="space-y-3">
-            {jobData.similarPositions.map((position, index) => (
-              <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
-                <div className="flex items-center space-x-3">
-                  <span className="text-gray-800">{position.title}</span>
-                  <span className={`text-xs px-2 py-1 rounded-full ${
-                    position.status === 'active' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-600'
-                  }`}>
-                    {position.status === 'active' ? '활성' : '마감'}
-                  </span>
+
+          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+            <div className="flex items-center mb-6">
+              <Link className="w-5 h-5 mr-2 text-blue-600" />
+              <h3 className="text-lg font-semibold text-gray-800">연관 포지션</h3>
+            </div>
+            <div className="space-y-3">
+              {jobData.similarPositions.map((position, index) => (
+                <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+                  <div className="flex items-center space-x-3">
+                    <span className="text-gray-800">{position.title}</span>
+                    <span className={`text-xs px-2 py-1 rounded-full ${
+                      position.status === 'active' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-600'
+                    }`}>
+                      {position.status === 'active' ? '활성' : '마감'}
+                    </span>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <button 
+                      onClick={() => handleJobNavigation(position.id)}
+                      className="p-1 text-gray-600 hover:text-blue-600"
+                      title="포지션 페이지로 이동"
+                    >
+                      <Eye className="w-4 h-4" />
+                    </button>
+                    <button className="p-1 text-gray-600 hover:text-green-600">
+                      <Copy className="w-4 h-4" />
+                    </button>
+                  </div>
                 </div>
-                <div className="flex items-center space-x-2">
-                  <button 
-                    onClick={() => handleJobNavigation(position.id)}
-                    className="p-1 text-gray-600 hover:text-blue-600"
-                    title="포지션 페이지로 이동"
-                  >
-                    <Eye className="w-4 h-4" />
-                  </button>
-                  <button className="p-1 text-gray-600 hover:text-green-600">
-                    <Copy className="w-4 h-4" />
-                  </button>
-                </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
       </div>
+
+      {/* 설정 모달 */}
+      {showStatsSettings && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-xl shadow-xl max-w-4xl w-full mx-4 max-h-[80vh] overflow-hidden">
+            {/* 모달 헤더 */}
+            <div className="flex items-center justify-between p-6 border-b border-gray-200">
+              <h3 className="text-xl font-semibold text-gray-800 flex items-center">
+                <Settings className="w-6 h-6 mr-3 text-blue-600" />
+                표시 항목 설정
+              </h3>
+              <div className="flex items-center space-x-3">
+                <div className="flex space-x-2">
+                  <button
+                    onClick={() => {
+                      handleSelectAllStats();
+                      handleSelectAllStatus();
+                    }}
+                    className="text-sm px-3 py-1 bg-blue-100 text-blue-700 rounded hover:bg-blue-200 transition-colors"
+                  >
+                    전체 선택
+                  </button>
+                  <button
+                    onClick={() => {
+                      handleDeselectAllStats();
+                      handleDeselectAllStatus();
+                    }}
+                    className="text-sm px-3 py-1 bg-gray-100 text-gray-700 rounded hover:bg-gray-200 transition-colors"
+                  >
+                    전체 해제
+                  </button>
+                </div>
+                <button
+                  onClick={() => setShowStatsSettings(false)}
+                  className="text-gray-400 hover:text-gray-600 transition-colors"
+                >
+                  <X className="w-6 h-6" />
+                </button>
+              </div>
+            </div>
+            
+            {/* 모달 내용 */}
+            <div className="p-6 overflow-y-auto max-h-[60vh]">
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                {Object.entries(allStatsOptions).map(([key, option]) => (
+                  <div key={key} className="p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+                    <div className="flex items-center space-x-3 mb-3">
+                      <input
+                        type="checkbox"
+                        checked={selectedStats.includes(key) && selectedStatusItems.includes(key)}
+                        onChange={(e) => {
+                          if (e.target.checked) {
+                            if (!selectedStats.includes(key)) handleStatsToggle(key);
+                            if (!selectedStatusItems.includes(key)) handleStatusToggle(key);
+                          } else {
+                            if (selectedStats.includes(key)) handleStatsToggle(key);
+                            if (selectedStatusItems.includes(key)) handleStatusToggle(key);
+                          }
+                        }}
+                        className="w-5 h-5 text-blue-600 rounded border-gray-300 focus:ring-blue-500"
+                      />
+                      <span className="font-semibold text-gray-800">{option.label}</span>
+                    </div>
+                    <div className="ml-8 space-y-1 text-sm text-gray-600">
+                      <div className="flex justify-between">
+                        <span>통계:</span>
+                        <span className="font-medium">{jobData.stats[key] || 0}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span>현황:</span>
+                        <span className="font-medium">{jobData.stageStats[key]?.count || 0}명</span>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+            
+            {/* 모달 푸터 */}
+            <div className="p-6 border-t border-gray-200 bg-gray-50">
+              <div className="flex items-center justify-between">
+                <div className="text-sm text-gray-600">
+                  <div className="flex items-center space-x-6">
+                    <div>
+                      <span className="font-medium">채용 통계:</span> {selectedStats.length}개 항목 선택
+                    </div>
+                    <div>
+                      <span className="font-medium">채용 현황:</span> {selectedStatusItems.length}개 항목 선택
+                    </div>
+                  </div>
+                </div>
+                <button
+                  onClick={() => setShowStatsSettings(false)}
+                  className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
+                >
+                  완료
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 
@@ -829,7 +884,15 @@ const PositionDetails = ({ onBack, jrNo }) => {
   };
 
   const renderJobInfoContent = () => {
-    return renderPlaceholderContent('Job Info');
+    return (
+      <JobInfoPage 
+        onBack={handleJobInfoBack}
+        positionData={jobData}
+        jrNo={jrNo}
+        positionStatus="active"
+        onPositionStatusChange={(status) => console.log('상태 변경:', status)}
+      />
+    );
   };
 
   const renderPlaceholderContent = (title) => (
@@ -880,37 +943,59 @@ const PositionDetails = ({ onBack, jrNo }) => {
       </div>
 
       <div className="flex-1 ml-64">
-        {activeSection === 'candidates' ? (
-          renderCandidatesContent()
-        ) : (
-          <>
-            <div className="bg-white shadow-sm border-b border-gray-200 px-6 py-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <h1 className="text-2xl font-bold text-gray-800">
-                    {navigationItems.find(item => item.id === activeSection)?.label}
-                  </h1>
-                  <p className="text-gray-600 mt-1">{jobData.jobName}</p>
-                </div>
-                <div className="flex items-center space-x-4">
-                  <span className="text-sm bg-green-100 text-green-800 px-3 py-1 rounded-full">
-                    Active
-                  </span>
-                  <span className="text-sm bg-blue-100 text-blue-800 px-3 py-1 rounded-full">
-                    MATS: {jobData.matsNumber}
-                  </span>
-                </div>
+        {/* 공통 헤더 - 모든 섹션에서 사용 */}
+        <div className="bg-white shadow-sm border-b border-gray-200 px-6 py-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-2xl font-bold text-gray-800">
+                {navigationItems.find(item => item.id === activeSection)?.label}
+              </h1>
+              <p className="text-gray-600 mt-1">{jobData.jobName}</p>
+            </div>
+            <div className="flex items-center space-x-3">
+              {/* 병합 처리 버튼 */}
+              <button
+                onClick={() => alert('병합 처리 창을 준비 중입니다.')}
+                className="px-3 py-2 bg-purple-100 text-purple-700 rounded-lg hover:bg-purple-200 transition-colors text-sm font-medium"
+              >
+                병합 처리
+              </button>
+              
+              {/* 상태 드롭다운 */}
+              <div className="relative">
+                <select
+                  defaultValue="active"
+                  className="px-3 py-2 bg-blue-100 text-blue-700 rounded-lg text-sm font-medium border-0 cursor-pointer appearance-none pr-8 hover:bg-blue-200 transition-colors"
+                >
+                  <option value="active">Active</option>
+                  <option value="paused">Paused</option>
+                  <option value="closed">Closed</option>
+                  <option value="draft">Draft</option>
+                </select>
+                <ChevronDown className="w-4 h-4 absolute right-2 top-1/2 transform -translate-y-1/2 pointer-events-none text-blue-600" />
               </div>
+              
+              {/* 상태 표시 (읽기 전용) */}
+              <span className="text-sm bg-green-100 text-green-800 px-3 py-2 rounded-lg font-medium">
+                Active
+              </span>
+              
+              {/* MATS 번호 */}
+              <span className="text-sm bg-gray-100 text-gray-700 px-3 py-2 rounded-lg font-medium">
+                {jobData.matsNumber.replace(/^JR/, 'MATS')}
+              </span>
             </div>
+          </div>
+        </div>
 
-            <div className="p-6">
-              {activeSection === 'overview' && renderOverviewContent()}
-              {activeSection === 'jd' && renderJDContent()}
-              {activeSection === 'kickoff' && renderKickoffContent()}
-              {activeSection === 'jobinfo' && renderJobInfoContent()}
-            </div>
-          </>
-        )}
+        {/* 컨텐츠 영역 */}
+        <div className="p-6">
+          {activeSection === 'overview' && renderOverviewContent()}
+          {activeSection === 'candidates' && renderCandidatesContent()}
+          {activeSection === 'jd' && renderJDContent()}
+          {activeSection === 'kickoff' && renderKickoffContent()}
+          {activeSection === 'jobinfo' && renderJobInfoContent()}
+        </div>
       </div>
     </div>
   );
