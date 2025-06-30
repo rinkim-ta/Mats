@@ -1,57 +1,6 @@
 import React, { useState } from 'react';
 import { Filter, Plus, Eye, Edit, Download, Upload, Search, ChevronDown, Calendar, Clock, User, Mail, Phone, FileText, MessageSquare, Star, Award } from 'lucide-react';
 
-// SharedPositionHeader 컴포넌트
-const SharedPositionHeader = ({ 
-  title, 
-  subtitle, 
-  positionStatus, 
-  onPositionStatusChange, 
-  matsNumber,
-  children 
-}) => {
-  const positionStatusOptions = {
-    'draft': { label: '드래프트', color: 'bg-gray-100 text-gray-800' },
-    'active': { label: '활성', color: 'bg-green-100 text-green-800' },
-    'paused': { label: '일시정지', color: 'bg-yellow-100 text-yellow-800' },
-    'on_hold': { label: '보류', color: 'bg-orange-100 text-orange-800' },
-    'closed': { label: '마감', color: 'bg-red-100 text-red-800' },
-    'cancelled': { label: '취소', color: 'bg-gray-100 text-gray-600' },
-    'completed': { label: '완료', color: 'bg-blue-100 text-blue-800' }
-  };
-
-  return (
-    <div className="bg-white shadow-sm border-b border-gray-200 px-6 py-4 sticky top-0 z-10">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-800">{title}</h1>
-          <p className="text-gray-600 mt-1">{subtitle}</p>
-        </div>
-        <div className="flex items-center space-x-4">
-          {children}
-          
-          <div className="relative">
-            <select
-              value={positionStatus || 'active'}
-              onChange={(e) => onPositionStatusChange && onPositionStatusChange(e.target.value)}
-              className={`text-sm px-3 py-1 rounded-full border-0 cursor-pointer font-medium ${positionStatusOptions[positionStatus || 'active'].color} appearance-none pr-8`}
-            >
-              {Object.entries(positionStatusOptions).map(([key, option]) => (
-                <option key={key} value={key}>{option.label}</option>
-              ))}
-            </select>
-            <ChevronDown className="w-4 h-4 absolute right-2 top-1/2 transform -translate-y-1/2 pointer-events-none text-gray-500" />
-          </div>
-          
-          <span className="text-sm bg-blue-100 text-blue-800 px-3 py-1 rounded-full">
-            MATS: {matsNumber}
-          </span>
-        </div>
-      </div>
-    </div>
-  );
-};
-
 const PositionDetailsApplicants = ({ onBack, positionData, jrNo, positionStatus, onPositionStatusChange }) => {
   const [stageFilter, setStageFilter] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
@@ -324,19 +273,10 @@ const PositionDetailsApplicants = ({ onBack, positionData, jrNo, positionStatus,
   );
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* SharedPositionHeader 사용 */}
-      <SharedPositionHeader
-        title="후보자 관리"
-        subtitle={positionData?.jobName || 'Frontend Engineer (29cm)'}
-        positionStatus={positionStatus}
-        onPositionStatusChange={onPositionStatusChange}
-        matsNumber={jrNo || 'JR0000001111'}
-      />
-
-      {/* Filters and Controls */}
-      <div className="bg-white border-b border-gray-200 px-6 py-4">
-        <div className="flex items-center justify-between">
+    <div className="space-y-6">
+      {/* 검색과 필터 컨트롤들 */}
+      <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
+        <div className="flex items-center justify-between w-full">
           <div className="flex items-center space-x-4">
             {/* 검색 */}
             <div className="relative">
@@ -412,20 +352,18 @@ const PositionDetailsApplicants = ({ onBack, positionData, jrNo, positionStatus,
         </div>
       </div>
 
-      {/* Content */}
-      <div className="p-6">
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-          {filteredCandidates.length === 0 ? (
-            <div className="text-center py-12">
-              <h3 className="text-lg font-medium text-gray-600 mb-2">후보자가 없습니다</h3>
-              <p className="text-gray-500">검색 조건을 변경하거나 새 후보자를 추가해보세요.</p>
-            </div>
-          ) : (
-            <>
-              {viewMode === 'table' ? renderTableView() : renderCardView()}
-            </>
-          )}
-        </div>
+      {/* Content - 테이블/카드 내용 */}
+      <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+        {filteredCandidates.length === 0 ? (
+          <div className="text-center py-12">
+            <h3 className="text-lg font-medium text-gray-600 mb-2">후보자가 없습니다</h3>
+            <p className="text-gray-500">검색 조건을 변경하거나 새 후보자를 추가해보세요.</p>
+          </div>
+        ) : (
+          <>
+            {viewMode === 'table' ? renderTableView() : renderCardView()}
+          </>
+        )}
       </div>
     </div>
   );
