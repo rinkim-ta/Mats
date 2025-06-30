@@ -760,3 +760,4 @@ Backend, DevOps, Database 등의 영역에 대해 깊은 이해가 있거나 경
 };
 
 export default JobDescriptionPage;
+export { JDSection };
