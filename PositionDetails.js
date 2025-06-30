@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { User, MapPin, Calendar, Clock, AlertTriangle, CheckCircle, XCircle, FileText, MessageSquare, Star, TrendingUp, ChevronRight, Mail, Phone, Award, Briefcase, DollarSign, Upload, Tag, Send, Eye, ThumbsUp, ThumbsDown, ChevronDown, ChevronUp, Building, Users, Copy, Edit, Plus, Target, BookOpen, Filter, BarChart3, Lock, Info, Link, Settings, File, Play, Bell, X } from 'lucide-react';
-import KickoffDocumentPage from './PositionDetailsMeeting';
-import JobDescriptionPage from './PositionDetailsJD';
+import PositionDetailsJD from './PositionDetailsJD';
 import PositionDetailsApplicants from './PositionDetailsApplicants';
 import JobInfoPage from './PositionDetailsJobInfo';
+import PositionDetailsMeeting from './PositionDetailsMeeting';
 
 const PositionDetails = ({ onBack, jrNo }) => {
   const [activeSection, setActiveSection] = useState('overview');
@@ -34,16 +34,6 @@ const PositionDetails = ({ onBack, jrNo }) => {
   const availableUsers = ['김린', '차지현', '김태현', '박영수', '이미경'];
 
   const [showStatsSettings, setShowStatsSettings] = useState(false);
-  const [selectedStats, setSelectedStats] = useState([
-    'totalApplications', 
-    'documentReview', 
-    'preAssignment', 
-    'firstInterview', 
-    'secondInterview', 
-    'thirdInterview', 
-    'offerNegotiation', 
-    'finalAccepted'
-  ]);
 
   const [selectedStatusItems, setSelectedStatusItems] = useState([
     'totalApplications', 
@@ -84,6 +74,52 @@ const PositionDetails = ({ onBack, jrNo }) => {
     jobGroup: 'IT/개발',
     position: 'Frontend Engineer (29cm)',
     closeDate: '2025.08.10',
+    // 새로 추가된 직무 설명 요약과 사유
+    jobSummary: `29cm 서비스의 프론트엔드 개발을 담당할 시니어 엔지니어를 찾고 있습니다. 
+
+주요 업무:
+• React, TypeScript를 활용한 웹 애플리케이션 개발
+• 사용자 경험 최적화 및 성능 개선
+• 백엔드 팀과의 협업을 통한 API 연동
+• 코드 리뷰 및 주니어 개발자 멘토링
+• 새로운 기술 스택 도입 및 아키텍처 설계
+
+필요 역량:
+• React 5년 이상 실무 경험
+• TypeScript, ES6+ 숙련
+• 상태관리 라이브러리 경험 (Redux, Zustand 등)
+• 웹 성능 최적화 경험
+• 반응형 웹 개발 경험
+• Git을 활용한 협업 경험
+
+우대사항:
+• Next.js 프레임워크 경험
+• 테스트 코드 작성 경험 (Jest, Testing Library)
+• 빌드 도구 설정 경험 (Webpack, Vite)
+• UI/UX 디자인에 대한 이해
+• 애자일 개발 방법론 경험`,
+    hiringReason: `플랫폼본부 29cm 팀의 급속한 성장과 함께 다음과 같은 이유로 Frontend Engineer 채용이 필요합니다:
+
+사업적 배경:
+• 29cm 서비스 월 활성 사용자 300% 증가로 인한 개발 업무량 급증
+• 신규 기능 개발 속도 향상 필요 (현재 배포 주기: 2주 → 목표: 1주)
+• 모바일 트래픽 비중 증가로 인한 반응형 최적화 작업 증가
+
+기술적 배경:
+• 레거시 코드 리팩토링 프로젝트 진행 중 (jQuery → React 마이그레이션)
+• 마이크로 프론트엔드 아키텍처 도입 계획
+• 성능 최적화 프로젝트 (페이지 로딩 속도 50% 개선 목표)
+
+조직적 배경:
+• 현재 Frontend 팀 3명으로 업무량 대비 인력 부족
+• 시니어 개발자 부재로 인한 기술적 의사결정 지연
+• 주니어 개발자들의 성장을 위한 멘토 역할 필요
+
+기대 효과:
+• 개발 생산성 40% 향상 예상
+• 코드 품질 개선 및 유지보수성 향상
+• 팀원들의 기술적 성장 가속화
+• 신규 서비스 런칭 일정 단축 (3개월 → 2개월)`,
     headcounts: [
       { id: 'MATS0000111', status: 'hiring', assignedRecruiter: '김린' },
       { id: 'MATS0000112', status: 'completed', assignedRecruiter: '김린' },
@@ -157,7 +193,7 @@ const PositionDetails = ({ onBack, jrNo }) => {
     { id: 'jd', label: '공고 관리', icon: FileText },
     { id: 'candidates', label: '후보자 관리', icon: Users },
     { id: 'kickoff', label: '회의록 관리', icon: Play },
-    { id: 'jobinfo', label: 'Job Info', icon: Info }
+    { id: 'jobinfo', label: '포지션 관리', icon: Info }
   ];
 
   const handleJobNavigation = (jobId) => {
@@ -169,22 +205,6 @@ const PositionDetails = ({ onBack, jrNo }) => {
     if (wow >= 90) return 'text-green-600';
     if (wow >= 80) return 'text-yellow-600';
     return 'text-red-600';
-  };
-
-  const handleKickoffDocumentBack = () => {
-    setActiveSection('overview');
-  };
-
-  const handleJDBack = () => {
-    setActiveSection('overview');
-  };
-
-  const handleJobInfoBack = () => {
-    setActiveSection('overview');
-  };
-
-  const handleApplicantsBack = () => {
-    setActiveSection('overview');
   };
 
   const handleAddMemo = () => {
@@ -260,22 +280,6 @@ const PositionDetails = ({ onBack, jrNo }) => {
     });
   };
 
-  const handleStatsToggle = (statKey) => {
-    setSelectedStats(prev => 
-      prev.includes(statKey)
-        ? prev.filter(key => key !== statKey)
-        : [...prev, statKey]
-    );
-  };
-
-  const handleSelectAllStats = () => {
-    setSelectedStats(Object.keys(allStatsOptions));
-  };
-
-  const handleDeselectAllStats = () => {
-    setSelectedStats([]);
-  };
-
   const handleStatusToggle = (statusKey) => {
     setSelectedStatusItems(prev => 
       prev.includes(statusKey)
@@ -290,21 +294,6 @@ const PositionDetails = ({ onBack, jrNo }) => {
 
   const handleDeselectAllStatus = () => {
     setSelectedStatusItems([]);
-  };
-
-  const getStatColor = (colorName) => {
-    const colorMap = {
-      'blue': 'bg-blue-50 text-blue-600',
-      'indigo': 'bg-indigo-50 text-indigo-600',
-      'purple': 'bg-purple-50 text-purple-600',
-      'orange': 'bg-orange-50 text-orange-600',
-      'red': 'bg-red-50 text-red-600',
-      'pink': 'bg-pink-50 text-pink-600',
-      'yellow': 'bg-yellow-50 text-yellow-600',
-      'green': 'bg-green-50 text-green-600',
-      'gray': 'bg-gray-50 text-gray-600'
-    };
-    return colorMap[colorName] || 'bg-gray-50 text-gray-600';
   };
 
   const getDaysFromOpen = () => {
@@ -322,7 +311,7 @@ const PositionDetails = ({ onBack, jrNo }) => {
         <button
           onClick={() => setShowStatsSettings(!showStatsSettings)}
           className="px-4 py-2 bg-white hover:bg-gray-50 border border-gray-200 rounded-lg transition-colors flex items-center text-gray-700 hover:text-blue-600 shadow-sm"
-          title="통계 및 현황 표시 설정"
+          title="현황 표시 설정"
         >
           <Settings className="w-4 h-4 mr-2" />
           표시 항목 설정
@@ -330,7 +319,85 @@ const PositionDetails = ({ onBack, jrNo }) => {
       </div>
 
       <div className="space-y-8 pt-16">
+        {/* 설정 모달 */}
+        {showStatsSettings && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div className="bg-white rounded-xl shadow-xl max-w-4xl w-full mx-4 max-h-[80vh] overflow-hidden">
+              {/* 모달 헤더 */}
+              <div className="flex items-center justify-between p-6 border-b border-gray-200">
+                <h3 className="text-xl font-semibold text-gray-800 flex items-center">
+                  <Settings className="w-6 h-6 mr-3 text-blue-600" />
+                  현황 표시 설정
+                </h3>
+                <div className="flex items-center space-x-3">
+                  <div className="flex space-x-2">
+                    <button
+                      onClick={handleSelectAllStatus}
+                      className="text-sm px-3 py-1 bg-blue-100 text-blue-700 rounded hover:bg-blue-200 transition-colors"
+                    >
+                      전체 선택
+                    </button>
+                    <button
+                      onClick={handleDeselectAllStatus}
+                      className="text-sm px-3 py-1 bg-gray-100 text-gray-700 rounded hover:bg-gray-200 transition-colors"
+                    >
+                      전체 해제
+                    </button>
+                  </div>
+                  <button
+                    onClick={() => setShowStatsSettings(false)}
+                    className="text-gray-400 hover:text-gray-600 transition-colors"
+                  >
+                    <X className="w-6 h-6" />
+                  </button>
+                </div>
+              </div>
+              
+              {/* 모달 내용 */}
+              <div className="p-6 overflow-y-auto max-h-[60vh]">
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                  {Object.entries(allStatsOptions).map(([key, option]) => (
+                    <div key={key} className="p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+                      <div className="flex items-center space-x-3 mb-3">
+                        <input
+                          type="checkbox"
+                          checked={selectedStatusItems.includes(key)}
+                          onChange={() => handleStatusToggle(key)}
+                          className="w-5 h-5 text-blue-600 rounded border-gray-300 focus:ring-blue-500"
+                        />
+                        <span className="font-semibold text-gray-800">{option.label}</span>
+                      </div>
+                      <div className="ml-8 text-sm text-gray-600">
+                        <div className="flex justify-between">
+                          <span>총 인원:</span>
+                          <span className="font-medium">{jobData.stats[key] || 0}명</span>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              
+              {/* 모달 푸터 */}
+              <div className="p-6 border-t border-gray-200 bg-gray-50">
+                <div className="flex items-center justify-between">
+                  <div className="text-sm text-gray-600">
+                    <span className="font-medium">선택된 항목:</span> {selectedStatusItems.length}개
+                  </div>
+                  <button
+                    onClick={() => setShowStatsSettings(false)}
+                    className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
+                  >
+                    완료
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* 포지션 정보 */}
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
             <div className="flex items-center justify-between mb-6">
               <div className="flex items-center">
@@ -391,65 +458,46 @@ const PositionDetails = ({ onBack, jrNo }) => {
                 <p className="text-sm font-semibold text-gray-900 mt-1">{jobData.closeDate}</p>
               </div>
               <div>
-                <label className="text-xs font-medium text-gray-500 uppercase tracking-wide">날짜 하나 더</label>
+                <label className="text-xs font-medium text-gray-500 uppercase tracking-wide">무슨 날짜든</label>
                 <p className="text-sm font-semibold text-gray-900 mt-1">{jobData.closeDate}</p>
               </div>
-              
-              {/* 면접관 정보 - 선택된 표시 항목에 따라 동적으로 표시 */}
-              {selectedStats.includes('firstInterview') && (
-                <div>
-                  <label className="text-xs font-medium text-gray-500 uppercase tracking-wide">1차 면접관</label>
-                  <p className="text-sm font-semibold text-gray-900 mt-1">{jobData.firstInterviewer || '-'}</p>
-                </div>
-              )}
-              {selectedStats.includes('secondInterview') && (
-                <div>
-                  <label className="text-xs font-medium text-gray-500 uppercase tracking-wide">2차 면접관</label>
-                  <p className="text-sm font-semibold text-gray-900 mt-1">{jobData.secondInterviewer || '-'}</p>
-                </div>
-              )}
-              {selectedStats.includes('thirdInterview') && (
-                <div>
-                  <label className="text-xs font-medium text-gray-500 uppercase tracking-wide">3차 면접관</label>
-                  <p className="text-sm font-semibold text-gray-900 mt-1">{jobData.thirdInterviewer || '-'}</p>
-                </div>
-              )}
             </div>
           </div>
 
+          {/* 포지션 개요 */}
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
             <div className="flex items-center justify-between mb-6">
               <div className="flex items-center">
-                <BarChart3 className="w-5 h-5 mr-2 text-blue-600" />
-                <h3 className="text-lg font-semibold text-gray-800">채용 통계</h3>
+                <BookOpen className="w-5 h-5 mr-2 text-blue-600" />
+                <h3 className="text-lg font-semibold text-gray-800">포지션 개요</h3>
               </div>
             </div>
             
-            {selectedStats.length === 0 ? (
-              <div className="text-center py-8 text-gray-500">
-                <BarChart3 className="w-12 h-12 mx-auto mb-3 text-gray-300" />
-                <p>표시할 통계를 선택해주세요.</p>
-                <button
-                  onClick={() => setShowStatsSettings(true)}
-                  className="mt-2 text-blue-600 hover:text-blue-800 underline"
-                >
-                  설정하기
-                </button>
+            <div className="max-h-80 overflow-y-auto">
+              <div className="space-y-6">
+                {/* 직무 설명 요약 */}
+                <div>
+                  <h4 className="text-md font-semibold text-gray-800 mb-3 flex items-center">
+                    <div className="w-2 h-2 bg-blue-500 rounded-full mr-2"></div>
+                    직무 설명 요약
+                  </h4>
+                  <div className="text-sm text-gray-700 leading-relaxed space-y-1">
+                    <div>• 무신사 내 오프라인 베이스 신규 프로젝트 기획/실행, 오프라인 운영 프로세스 내재화, 신규 세일즈 체널 확보 등 업무를 통해 오프라인 경쟁력을 지속 제고함</div>
+                  </div>
+                </div>
+
+                {/* 사유 */}
+                <div>
+                  <h4 className="text-md font-semibold text-gray-800 mb-3 flex items-center">
+                    <div className="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
+                    사유
+                  </h4>
+                  <div className="text-sm text-gray-700 leading-relaxed space-y-1">
+                    <div>• 24년 기준 20명 이상이었던 무신사스튜디오 세일즈 및 운영 인력을 전반적인 구조 조정 및 운영 효율화를 통해 현재 7명 체제로 축소하였음. 불필요한 리소스는 과감히 정리한 반면, 효율성과 성과 중심의 조직으로 재편한 상황입니다. 하지만 신규 지점(동대문종합시장점) 오픈이 확정되었고, 기존 인력으로는 해당 지점 세일즈 및 운영 대응이 불가능한 상황이고, 또한 재계약 이탈을 방지하고, 매출 보존 및 확대를 위해 신규 계약을 체결할 전담 인력의 확보가 필수적으로 신규 채용 진행을 요청드립니다.</div>
+                  </div>
+                </div>
               </div>
-            ) : (
-              <div className="grid grid-cols-3 gap-3 mb-6">
-                {selectedStats.map((statKey) => {
-                  const option = allStatsOptions[statKey];
-                  const value = jobData.stats[statKey] || 0;
-                  return (
-                    <div key={statKey} className={`text-center p-3 rounded-lg ${getStatColor(option.color)}`}>
-                      <div className="text-xl font-bold">{value}</div>
-                      <div className="text-xs text-gray-600">{option.label}</div>
-                    </div>
-                  );
-                })}
-              </div>
-            )}
+            </div>
           </div>
         </div>
 
@@ -521,18 +569,6 @@ const PositionDetails = ({ onBack, jrNo }) => {
                         <div className="text-sm text-gray-600">채용이 계획대로 순조롭게 진행되고 있습니다</div>
                       </div>
                     )}
-                    {jobData.recruitmentStatus === 'warning' && (
-                      <div>
-                        <div className="text-lg font-semibold text-yellow-600 mb-2">주의 필요</div>
-                        <div className="text-sm text-gray-600">일부 단계에서 지연이 발생하고 있습니다</div>
-                      </div>
-                    )}
-                    {jobData.recruitmentStatus === 'danger' && (
-                      <div>
-                        <div className="text-lg font-semibold text-red-600 mb-2">긴급 조치 필요</div>
-                        <div className="text-sm text-gray-600">채용 진행에 심각한 문제가 있습니다</div>
-                      </div>
-                    )}
                   </div>
                   
                   <div className="grid grid-cols-2 gap-4 text-sm">
@@ -548,6 +584,24 @@ const PositionDetails = ({ onBack, jrNo }) => {
                       <div className="text-gray-500 mb-1">면접 합격률</div>
                       <div className="font-semibold text-gray-800">{jobData.passRate}%</div>
                     </div>
+                    {selectedStatusItems.includes('firstInterview') && (
+                      <div className="text-center p-3 bg-white rounded-lg">
+                        <div className="text-gray-500 mb-1">1차 면접 합격률</div>
+                        <div className="font-semibold text-gray-800">75%</div>
+                      </div>
+                    )}
+                    {selectedStatusItems.includes('secondInterview') && (
+                      <div className="text-center p-3 bg-white rounded-lg">
+                        <div className="text-gray-500 mb-1">2차 면접 합격률</div>
+                        <div className="font-semibold text-gray-800">67%</div>
+                      </div>
+                    )}
+                    {selectedStatusItems.includes('thirdInterview') && (
+                      <div className="text-center p-3 bg-white rounded-lg">
+                        <div className="text-gray-500 mb-1">3차 면접 합격률</div>
+                        <div className="font-semibold text-gray-800">60%</div>
+                      </div>
+                    )}
                     <div className="text-center p-3 bg-white rounded-lg">
                       <div className="text-gray-500 mb-1">최종 합격률</div>
                       <div className="font-semibold text-gray-800">{jobData.passRate}%</div>
@@ -574,21 +628,7 @@ const PositionDetails = ({ onBack, jrNo }) => {
               className="w-full p-3 border border-gray-300 rounded-lg resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               rows="3"
             />
-            <div className="flex justify-between items-center mt-3">
-              <div className="text-sm text-gray-500">
-                <span className="font-medium">태그 가능한 사용자:</span>
-                {availableUsers.map((user, index) => (
-                  <span key={user} className="ml-1">
-                    <button
-                      onClick={() => setNewMemo(prev => prev + `@${user} `)}
-                      className="text-blue-600 hover:text-blue-800 underline"
-                    >
-                      @{user}
-                    </button>
-                    {index < availableUsers.length - 1 && ', '}
-                  </span>
-                ))}
-              </div>
+            <div className="flex justify-end items-center mt-3">
               <button
                 onClick={handleAddMemo}
                 disabled={!newMemo.trim()}
@@ -748,152 +788,8 @@ const PositionDetails = ({ onBack, jrNo }) => {
           </div>
         </div>
       </div>
-
-      {/* 설정 모달 */}
-      {showStatsSettings && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-xl shadow-xl max-w-4xl w-full mx-4 max-h-[80vh] overflow-hidden">
-            {/* 모달 헤더 */}
-            <div className="flex items-center justify-between p-6 border-b border-gray-200">
-              <h3 className="text-xl font-semibold text-gray-800 flex items-center">
-                <Settings className="w-6 h-6 mr-3 text-blue-600" />
-                표시 항목 설정
-              </h3>
-              <div className="flex items-center space-x-3">
-                <div className="flex space-x-2">
-                  <button
-                    onClick={() => {
-                      handleSelectAllStats();
-                      handleSelectAllStatus();
-                    }}
-                    className="text-sm px-3 py-1 bg-blue-100 text-blue-700 rounded hover:bg-blue-200 transition-colors"
-                  >
-                    전체 선택
-                  </button>
-                  <button
-                    onClick={() => {
-                      handleDeselectAllStats();
-                      handleDeselectAllStatus();
-                    }}
-                    className="text-sm px-3 py-1 bg-gray-100 text-gray-700 rounded hover:bg-gray-200 transition-colors"
-                  >
-                    전체 해제
-                  </button>
-                </div>
-                <button
-                  onClick={() => setShowStatsSettings(false)}
-                  className="text-gray-400 hover:text-gray-600 transition-colors"
-                >
-                  <X className="w-6 h-6" />
-                </button>
-              </div>
-            </div>
-            
-            {/* 모달 내용 */}
-            <div className="p-6 overflow-y-auto max-h-[60vh]">
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                {Object.entries(allStatsOptions).map(([key, option]) => (
-                  <div key={key} className="p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
-                    <div className="flex items-center space-x-3 mb-3">
-                      <input
-                        type="checkbox"
-                        checked={selectedStats.includes(key) && selectedStatusItems.includes(key)}
-                        onChange={(e) => {
-                          if (e.target.checked) {
-                            if (!selectedStats.includes(key)) handleStatsToggle(key);
-                            if (!selectedStatusItems.includes(key)) handleStatusToggle(key);
-                          } else {
-                            if (selectedStats.includes(key)) handleStatsToggle(key);
-                            if (selectedStatusItems.includes(key)) handleStatusToggle(key);
-                          }
-                        }}
-                        className="w-5 h-5 text-blue-600 rounded border-gray-300 focus:ring-blue-500"
-                      />
-                      <span className="font-semibold text-gray-800">{option.label}</span>
-                    </div>
-                    <div className="ml-8 space-y-1 text-sm text-gray-600">
-                      <div className="flex justify-between">
-                        <span>통계:</span>
-                        <span className="font-medium">{jobData.stats[key] || 0}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span>현황:</span>
-                        <span className="font-medium">{jobData.stageStats[key]?.count || 0}명</span>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-            
-            {/* 모달 푸터 */}
-            <div className="p-6 border-t border-gray-200 bg-gray-50">
-              <div className="flex items-center justify-between">
-                <div className="text-sm text-gray-600">
-                  <div className="flex items-center space-x-6">
-                    <div>
-                      <span className="font-medium">채용 통계:</span> {selectedStats.length}개 항목 선택
-                    </div>
-                    <div>
-                      <span className="font-medium">채용 현황:</span> {selectedStatusItems.length}개 항목 선택
-                    </div>
-                  </div>
-                </div>
-                <button
-                  onClick={() => setShowStatsSettings(false)}
-                  className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
-                >
-                  완료
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
-
-  const renderCandidatesContent = () => {
-    return (
-      <PositionDetailsApplicants 
-        onBack={handleApplicantsBack}
-        positionData={jobData}
-        jrNo={jrNo}
-      />
-    );
-  };
-
-  const renderKickoffContent = () => {
-    return (
-      <KickoffDocumentPage 
-        onBack={handleKickoffDocumentBack}
-        positionData={jobData}
-        jrNo={jrNo}
-      />
-    );
-  };
-
-  const renderJDContent = () => {
-    return (
-      <JobDescriptionPage 
-        onBack={handleJDBack}
-        positionData={jobData}
-        jrNo={jrNo}
-      />
-    );
-  };
-
-  const renderJobInfoContent = () => {
-    return (
-      <JobInfoPage 
-        onBack={handleJobInfoBack}
-        positionData={jobData}
-        jrNo={jrNo}
-        positionStatus="active"
-        onPositionStatusChange={(status) => console.log('상태 변경:', status)}
-      />
-    );
-  };
 
   const renderPlaceholderContent = (title) => (
     <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-12 text-center">
@@ -943,7 +839,7 @@ const PositionDetails = ({ onBack, jrNo }) => {
       </div>
 
       <div className="flex-1 ml-64">
-        {/* 공통 헤더 - 모든 섹션에서 사용 */}
+        {/* 공통 헤더 */}
         <div className="bg-white shadow-sm border-b border-gray-200 px-6 py-4">
           <div className="flex items-center justify-between">
             <div>
@@ -953,7 +849,6 @@ const PositionDetails = ({ onBack, jrNo }) => {
               <p className="text-gray-600 mt-1">{jobData.jobName}</p>
             </div>
             <div className="flex items-center space-x-3">
-              {/* 병합 처리 버튼 */}
               <button
                 onClick={() => alert('병합 처리 창을 준비 중입니다.')}
                 className="px-3 py-2 bg-purple-100 text-purple-700 rounded-lg hover:bg-purple-200 transition-colors text-sm font-medium"
@@ -961,7 +856,6 @@ const PositionDetails = ({ onBack, jrNo }) => {
                 병합 처리
               </button>
               
-              {/* 상태 드롭다운 */}
               <div className="relative">
                 <select
                   defaultValue="active"
@@ -975,12 +869,10 @@ const PositionDetails = ({ onBack, jrNo }) => {
                 <ChevronDown className="w-4 h-4 absolute right-2 top-1/2 transform -translate-y-1/2 pointer-events-none text-blue-600" />
               </div>
               
-              {/* 상태 표시 (읽기 전용) */}
               <span className="text-sm bg-green-100 text-green-800 px-3 py-2 rounded-lg font-medium">
                 Active
               </span>
               
-              {/* MATS 번호 */}
               <span className="text-sm bg-gray-100 text-gray-700 px-3 py-2 rounded-lg font-medium">
                 {jobData.matsNumber.replace(/^JR/, 'MATS')}
               </span>
@@ -990,12 +882,30 @@ const PositionDetails = ({ onBack, jrNo }) => {
 
         {/* 컨텐츠 영역 */}
         <div className="p-6">
-          {activeSection === 'overview' && renderOverviewContent()}
-          {activeSection === 'candidates' && renderCandidatesContent()}
-          {activeSection === 'jd' && renderJDContent()}
-          {activeSection === 'kickoff' && renderKickoffContent()}
-          {activeSection === 'jobinfo' && renderJobInfoContent()}
-        </div>
+  {activeSection === 'overview' && renderOverviewContent()}
+  {activeSection === 'candidates' && (
+  <PositionDetailsApplicants 
+    onBack={onBack} 
+    positionData={jobData} 
+    jrNo={jrNo}
+    positionStatus="active"
+    onPositionStatusChange={() => {}}
+  />
+)}
+  {activeSection === 'jd' && <PositionDetailsJD onBack={onBack} jrNo={jrNo} />}
+  {activeSection === 'kickoff' && <PositionDetailsMeeting onBack={onBack} positionData={jobData} jrNo={jrNo} />}
+  {activeSection === 'jobinfo' && (
+  <div className="bg-white rounded-xl shadow-sm border border-gray-100">
+    <JobInfoPage 
+      onBack={onBack} 
+      positionData={jobData} 
+      jrNo={jrNo} 
+      positionStatus="active" 
+      onPositionStatusChange={() => {}} 
+    />
+  </div>
+)}
+</div>
       </div>
     </div>
   );
