@@ -58,6 +58,15 @@ const PositionDetails = ({ onBack, jrNo }) => {
     'rejected': { label: '불합격', color: 'gray' }
   };
 
+  // 지원자 유입 추이 데이터
+  const applicationTrendData = [
+    { date: '2025.06.08 주간', value: 0 },
+    { date: '2025.06.15 주간', value: 0 },
+    { date: '2025.06.22 주간', value: 0 },
+    { date: '2025.06.29 주간', value: 3.0 },
+    { date: '2025.07.06 주간', value: 0 }
+  ];
+
   const jobData = {
     jobName: 'Frontend Engineer (29cm)',
     department: '29cm',
@@ -501,6 +510,8 @@ const PositionDetails = ({ onBack, jrNo }) => {
           </div>
         </div>
 
+
+
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center">
@@ -610,6 +621,103 @@ const PositionDetails = ({ onBack, jrNo }) => {
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+        {/* 지원자 유입 추이 - 개선된 버전 */}
+        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center">
+              <TrendingUp className="w-5 h-5 mr-2 text-blue-600" />
+              <h3 className="text-lg font-semibold text-gray-800">지원자 유입 추이</h3>
+            </div>
+            <div className="flex items-center space-x-2">
+              <select className="text-sm border border-gray-300 rounded px-3 py-1">
+                <option>지난 1개월</option>
+                <option>지난 3개월</option>
+                <option>지난 6개월</option>
+              </select>
+              <select className="text-sm border border-gray-300 rounded px-3 py-1">
+                <option>포지션별: 주</option>
+                <option>포지션별: 일</option>
+                <option>포지션별: 월</option>
+              </select>
+              <button className="p-1 text-gray-400 hover:text-gray-600">
+                <ChevronDown className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+          
+          <div className="relative h-80 mb-4">
+            <svg className="w-full h-full" viewBox="0 0 1000 300">
+              {/* 그리드 라인 */}
+              <defs>
+                <pattern id="gridlines" width="200" height="60" patternUnits="userSpaceOnUse">
+                  <path d="M 200 0 L 0 0 0 60" fill="none" stroke="#f3f4f6" strokeWidth="1"/>
+                </pattern>
+                <linearGradient id="areaGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" style={{ stopColor: "#3b82f6", stopOpacity: 0.3 }} />
+                  <stop offset="100%" style={{ stopColor: "#3b82f6", stopOpacity: 0 }} />
+                </linearGradient>
+              </defs>
+              <rect width="100%" height="100%" fill="url(#gridlines)" />
+              
+              {/* Y축 라벨 */}
+              <g className="text-sm fill-gray-500">
+                <text x="40" y="50" textAnchor="end">3</text>
+                <text x="40" y="80" textAnchor="end">2.8</text>
+                <text x="40" y="110" textAnchor="end">2.6</text>
+                <text x="40" y="140" textAnchor="end">2.4</text>
+                <text x="40" y="170" textAnchor="end">2.2</text>
+                <text x="40" y="200" textAnchor="end">2</text>
+                <text x="40" y="230" textAnchor="end">1.8</text>
+                <text x="40" y="260" textAnchor="end">1.6</text>
+                <text x="40" y="290" textAnchor="end">1.4</text>
+                <text x="40" y="320" textAnchor="end">1.2</text>
+                <text x="40" y="350" textAnchor="end">1</text>
+                <text x="40" y="380" textAnchor="end">0.8</text>
+                <text x="40" y="410" textAnchor="end">0.6</text>
+                <text x="40" y="440" textAnchor="end">0.4</text>
+                <text x="40" y="470" textAnchor="end">0.2</text>
+                <text x="40" y="280" textAnchor="end">0</text>
+              </g>
+              
+              {/* 면적 채우기 */}
+              <path
+                d="M 80,280 L 280,280 L 480,280 L 680,180 L 880,280 L 880,300 L 80,300 Z"
+                fill="url(#areaGradient)"
+              />
+              
+              {/* 지원자 유입 추이 라인 */}
+              <polyline
+                fill="none"
+                stroke="#3b82f6"
+                strokeWidth="3"
+                points="80,280 280,280 480,280 680,180 880,280"
+              />
+              
+              {/* 데이터 포인트 */}
+              <circle cx="80" cy="280" r="5" fill="#3b82f6" className="hover:r-7 cursor-pointer transition-all" />
+              <circle cx="280" cy="280" r="5" fill="#3b82f6" className="hover:r-7 cursor-pointer transition-all" />
+              <circle cx="480" cy="280" r="5" fill="#3b82f6" className="hover:r-7 cursor-pointer transition-all" />
+              <circle cx="680" cy="180" r="5" fill="#3b82f6" className="hover:r-7 cursor-pointer transition-all" />
+              <circle cx="880" cy="280" r="5" fill="#3b82f6" className="hover:r-7 cursor-pointer transition-all" />
+              
+              {/* X축 라벨 */}
+              <g className="text-sm fill-gray-500">
+                <text x="80" y="320" textAnchor="middle">2025. 06. 08 주간</text>
+                <text x="280" y="320" textAnchor="middle">2025. 06. 15 주간</text>
+                <text x="480" y="320" textAnchor="middle">2025. 06. 22 주간</text>
+                <text x="680" y="320" textAnchor="middle">2025. 06. 29 주간</text>
+                <text x="880" y="320" textAnchor="middle">2025. 07. 06 주간</text>
+              </g>
+            </svg>
+          </div>
+          
+          <div className="text-xs text-gray-500 flex justify-between items-center">
+            <span>업데이트: 2025.07.07, 05:00</span>
+            <button className="flex items-center text-gray-400 hover:text-gray-600">
+              <ChevronDown className="w-4 h-4" />
+            </button>
           </div>
         </div>
 
@@ -882,30 +990,30 @@ const PositionDetails = ({ onBack, jrNo }) => {
 
         {/* 컨텐츠 영역 */}
         <div className="p-6">
-  {activeSection === 'overview' && renderOverviewContent()}
-  {activeSection === 'candidates' && (
-  <PositionDetailsApplicants 
-    onBack={onBack} 
-    positionData={jobData} 
-    jrNo={jrNo}
-    positionStatus="active"
-    onPositionStatusChange={() => {}}
-  />
-)}
-  {activeSection === 'jd' && <PositionDetailsJD onBack={onBack} jrNo={jrNo} />}
-  {activeSection === 'kickoff' && <PositionDetailsMeeting onBack={onBack} positionData={jobData} jrNo={jrNo} />}
-  {activeSection === 'jobinfo' && (
-  <div className="bg-white rounded-xl shadow-sm border border-gray-100">
-    <JobInfoPage 
-      onBack={onBack} 
-      positionData={jobData} 
-      jrNo={jrNo} 
-      positionStatus="active" 
-      onPositionStatusChange={() => {}} 
-    />
-  </div>
-)}
-</div>
+          {activeSection === 'overview' && renderOverviewContent()}
+          {activeSection === 'candidates' && (
+            <PositionDetailsApplicants 
+              onBack={onBack} 
+              positionData={jobData} 
+              jrNo={jrNo}
+              positionStatus="active"
+              onPositionStatusChange={() => {}}
+            />
+          )}
+          {activeSection === 'jd' && <PositionDetailsJD onBack={onBack} jrNo={jrNo} />}
+          {activeSection === 'kickoff' && <PositionDetailsMeeting onBack={onBack} positionData={jobData} jrNo={jrNo} />}
+          {activeSection === 'jobinfo' && (
+            <div className="bg-white rounded-xl shadow-sm border border-gray-100">
+              <JobInfoPage 
+                onBack={onBack} 
+                positionData={jobData} 
+                jrNo={jrNo} 
+                positionStatus="active" 
+                onPositionStatusChange={() => {}} 
+              />
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
